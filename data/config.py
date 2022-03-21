@@ -15,3 +15,6 @@ redis = {
     'address': (ip, 6379),
     'encoding': 'utf8'
 }
+
+
+token = "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"
