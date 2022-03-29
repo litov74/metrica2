@@ -102,8 +102,8 @@ def db_get_user_id_by_pass_and_login(login: str, passw: str, service: str):
 
 
 def db_get_data_id_by_id(id: str):
-    res = (cursor.execute('SELECT * FROM data WHERE user_id = ?', (str(id)))).fetchone()
-    if len(res) < 2:
+    res = (cursor.execute('SELECT * FROM data WHERE user_id = {}'.format(id))).fetchone()
+    if str(res) == "None":
         return False
     else:
         return True

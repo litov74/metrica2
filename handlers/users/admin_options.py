@@ -1,8 +1,11 @@
 from aiogram.dispatcher.filters import Text
 from aiogram.types import Message
+from flask import jsonify
+from requests import post
 
 from loader import dp
 from utils.dp_api.database import *
+from utils.net.yandex_request import app, baseurl, client_id, client_secret, shutdown_server, start_server
 
 
 @dp.message_handler(Text(contains="Добавить пользователя яндекс"))
@@ -25,10 +28,11 @@ async def add_yandex_user(message: Message):
         search = False
     if(search):
         db_add_yandex_user(id=db_get_user_id_by_name(name=name), login=msg[len(msg)-2], password=msg[len(msg)-1])
-        await message.answer("Пользователь яндекс добавлен успешно!")
+        await message.answer("Пользователь яндекс добавлен успешно!\nПройдите по этой ссылке для активации (там нужно выбрать соответствующий аккаунт): \nhttp://194.87.248.56:8000/")
+
     else:
         db_add_yandex_user(id=0, login=msg[len(msg)-2], password=msg[len(msg)-1])
-        await message.answer("Пользователь добавлен, но нужно привязать его к БД, т.к. пользователь всё ещё не писал боту")
+        await message.answer("Пользователь добавлен, но нужно привязать его к БД, т.к. пользователь всё ещё не писал боту\nПройдите по этой ссылке для активации (там нужно выбрать соответствующий аккаунт): \nhttp://127.0.0.1:8000/")
 
 
 @dp.message_handler(Text(contains="Добавить пользователя вк"))
@@ -99,3 +103,23 @@ async def link_user(message: Message):
             await message.answer("Произошла ошибка, попробуйте еще раз.")
     else:
         await message.answer("Недостаточно данных. Команда должна быть в виде 'Привязать пользователя к учетке сервис id(из списка пользователей) логин пароль'.")
+
+
+@dp.message_handler(Text(contains="код"))
+async def code_insert(message: Message):
+    pass
+    #data = list(message.text.split(sep=" ")) # [яндекс, id_пользователя, код, code]
+    #if db_get_data_id_by_id(str(data[1])):
+    #    if len(data) == 4:
+    #        to_send = {
+    #            'grant_type': 'authorization_code',
+    #            'code': int(data[3]),
+    #            'client_id': client_id,
+    #            'client_secret': client_secret
+    #        }
+    #        print(jsonify(post(post(baseurl + "token", to_send).json())))
+    #    else:
+    #        await message.reply(
+    #            "Недостаточно данных. Команда должна быть в виде 'сервис id_пользователя код code(7 символов)'")
+    #else:
+    #    await message.answer("Пользователь не найден, невозможно добавить его код.")

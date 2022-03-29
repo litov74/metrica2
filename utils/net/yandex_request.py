@@ -11,6 +11,7 @@ baseurl = 'https://oauth.yandex.ru/'
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
     if request.args.get('code', False):
@@ -29,6 +30,19 @@ def index():
         return redirect(baseurl + "authorize?response_type=code&client_id={}".format(client_id))
 
 
-if __name__ == '__main__':
-    app.debug = True
-    app.run(host='127.0.0.1', port=8000)
+@app.get('/shutdown')
+def shutdown():
+    shutdown_server()
+    return "Shutdown.."
+
+
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+
+
+def start_server():
+    app.debug = False
+    app.run(host='127.0.0.1', port=443)
