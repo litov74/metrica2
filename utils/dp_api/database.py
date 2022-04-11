@@ -5,16 +5,36 @@ cursor = conn.cursor()
 
 
 def db_fill_user_table(user_id: int, user_name: str):
+    """
+
+    :param user_id:
+    :param user_name:
+    :return:
+    """
     cursor.execute('INSERT INTO user (user_id, user_name) VALUES (?, ?)', (user_id, user_name))
     conn.commit()
 
 
 def db_add_yandex_user(id: int, login: str, password: str):
+    """
+
+    :param id:
+    :param login:
+    :param password:
+    :return:
+    """
     cursor.execute('INSERT INTO data (user_id, service, login, password) VALUES (?, ?, ?, ?)', (id, "yandex", login, password))
     conn.commit()
 
 
 def db_add_vk_user(id: int, login: str, password: str):
+    """
+
+    :param id:
+    :param login:
+    :param password:
+    :return:
+    """
     cursor.execute('INSERT INTO data (user_id, service, login, password) VALUES (?, ?, ?, ?)', (id, "vk", login, password))
     conn.commit()
 
@@ -60,6 +80,14 @@ def db_list_user():
 
 
 def db_link_user(service: str, id: int, login: str, password: str):
+    """
+
+    :param service:
+    :param id:
+    :param login:
+    :param password:
+    :return:
+    """
     res = (cursor.execute(f'SELECT * FROM data WHERE service = "{service}" AND login = "{login}" AND password = "{password}"')).fetchone()
     cursor.execute('DELETE FROM data WHERE id = ?', (str(res[0])))
     conn.commit()
@@ -93,6 +121,13 @@ def db_get_user_id_by_name(name: str):
 
 
 def db_get_user_id_by_pass_and_login(login: str, passw: str, service: str):
+    """
+
+    :param login:
+    :param passw:
+    :param service:
+    :return:
+    """
     res = (cursor.execute('SELECT * FROM data where login = ?', (login, )).fetchall())
     for i in range(0, len(res)):
         if res[i][4] == passw and res[i][2] == service:
@@ -102,6 +137,11 @@ def db_get_user_id_by_pass_and_login(login: str, passw: str, service: str):
 
 
 def db_get_data_id_by_id(id: str):
+    """
+
+    :param id:
+    :return:
+    """
     res = (cursor.execute('SELECT * FROM data WHERE user_id = {}'.format(id))).fetchone()
     if str(res) == "None":
         return False

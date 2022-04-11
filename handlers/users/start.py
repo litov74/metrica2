@@ -15,14 +15,9 @@ async def bot_start(message: types.Message):
     user_name = message.from_user.full_name
     for admin in admins:
         if user_id == admin:
-            func = request.environ.get('werkzeug.server.shutdown')
-            if func is None: start_server()
-            else: pass
             await message.answer("Добро пожаловать! Вы вошли как администратор", reply_markup=main_menu_admin)
-
             return
         else:
             db_fill_user_table(user_id, user_name)
             await message.answer("Вы успешно добавлены в базу данных.", reply_markup=main_menu)
-
             return
