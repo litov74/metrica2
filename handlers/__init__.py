@@ -1,4 +1,4 @@
-from .errors import dp
-from .users import dp
+from .errors import *
+from .users import *
 
 __all__ = ["dp"]

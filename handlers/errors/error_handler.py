@@ -1,6 +1,6 @@
 import logging
 
-from loader import dp
+from middlewares.loader import dp
 
 
 @dp.errors_handler()
